@@ -1,4 +1,3 @@
-// Clean SVG icon library — no emojis, production-ready
 
 export function PlayIcon({ size = 16, color = 'currentColor' }) {
   return (
