@@ -1,30 +1,19 @@
 import { useState, useEffect } from 'react';
 import { getAutomations } from '../api/mockApi';
 
-/**
- * Custom hook for fetching and caching mock automation actions
- */
 export function useAutomations() {
   const [automations, setAutomations] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
-
-    async function fetchAutomations() {
+    async function fetch() {
       try {
         const data = await getAutomations();
-        if (!cancelled) {
-          setAutomations(data);
-          setLoading(false);
-        }
-      } catch (err) {
-        console.error('Failed to fetch automations:', err);
-        if (!cancelled) setLoading(false);
-      }
+        if (!cancelled) { setAutomations(data); setLoading(false); }
+      } catch { if (!cancelled) setLoading(false); }
     }
-
-    fetchAutomations();
+    fetch();
     return () => { cancelled = true; };
   }, []);
 

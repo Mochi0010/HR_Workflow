@@ -1,25 +1,16 @@
-/* ============================================
-   HR Workflow Designer — Design System
-   Light Theme · Minimal · Corporate
-   ============================================ */
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* Color Palette — Light Theme */
   --bg-primary: #f7f7f8;
   --bg-secondary: #ffffff;
   --bg-tertiary: #f0f0f2;
   --bg-sidebar: #fafafa;
   --bg-hover: #f2f2f4;
   --bg-canvas: #fafbfc;
-
   --text-primary: #1a1a2e;
   --text-secondary: #555566;
   --text-muted: #8e8e9a;
   --text-light: #b0b0bc;
-
-  /* Accent Colors — Warm, Earthy, Professional */
   --accent-primary: #e85d3a;
   --accent-green: #34a853;
   --accent-red: #e74c3c;
@@ -27,9 +18,6 @@
   --accent-blue: #4a90d9;
   --accent-teal: #2bb5a0;
   --accent-purple: #7c5cfc;
-  --accent-coral: #e8734a;
-
-  /* Badge Colors */
   --badge-green: #d4edda;
   --badge-green-text: #28a745;
   --badge-red: #fde2e2;
@@ -38,129 +26,62 @@
   --badge-orange-text: #e8973a;
   --badge-blue: #d6eaf8;
   --badge-blue-text: #4a90d9;
-
-  /* Borders */
   --border-light: #e8e8ec;
   --border-subtle: #efefef;
   --border-hover: #d0d0d8;
-
-  /* Shadows */
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
-
-  /* Spacing */
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.1);
   --space-xs: 4px;
   --space-sm: 8px;
   --space-md: 12px;
   --space-lg: 16px;
   --space-xl: 20px;
   --space-2xl: 28px;
-  --space-3xl: 36px;
-
-  /* Radii */
   --radius-xs: 4px;
   --radius-sm: 6px;
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-full: 9999px;
-
-  /* Transitions */
   --transition-fast: 120ms ease;
   --transition-base: 200ms ease;
-
-  /* Layout */
   --header-height: 52px;
   --sidebar-width: 220px;
   --form-panel-width: 300px;
-
-  /* Typography */
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-size: 13px;
   line-height: 1.5;
   color: var(--text-primary);
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-#root {
-  width: 100vw;
-  height: 100vh;
-}
+#root { width: 100vw; height: 100vh; }
 
-/* Scrollbar — minimal */
-::-webkit-scrollbar {
-  width: 5px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: var(--border-hover);
-  border-radius: var(--radius-full);
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-light);
-}
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: var(--radius-full); }
+::selection { background: rgba(232,93,58,0.15); }
 
-::selection {
-  background: rgba(232, 93, 58, 0.15);
-}
-
-.required {
-  color: var(--accent-red);
-  font-weight: 600;
-}
-
-.loading-text {
-  color: var(--text-muted);
-  font-style: italic;
-  padding: var(--space-sm);
-  font-size: 12px;
-}
+.required { color: var(--accent-red); font-weight: 600; }
+.loading-text { color: var(--text-muted); font-style: italic; padding: var(--space-sm); font-size: 12px; }
 
 .spinner {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border: 2px solid rgba(0,0,0,0.1);
-  border-top-color: var(--accent-primary);
-  border-radius: 50%;
-  animation: spin 0.6s linear infinite;
-  margin-right: var(--space-xs);
-  vertical-align: middle;
+  display: inline-block; width: 14px; height: 14px;
+  border: 2px solid rgba(0,0,0,0.1); border-top-color: var(--accent-primary);
+  border-radius: 50%; animation: spin 0.6s linear infinite;
+  margin-right: var(--space-xs); vertical-align: middle;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideInRight {
-  from { opacity: 0; transform: translateX(12px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes slideInUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
+@keyframes slideInRight { from { opacity:0; transform:translateX(12px); } to { opacity:1; transform:translateX(0); } }
+@keyframes slideInUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }

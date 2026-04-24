@@ -1,79 +1,33 @@
-// Mock API layer for HR Workflow Designer
-// Simulates GET /automations and POST /simulate endpoints
-
 const AUTOMATIONS = [
-  {
-    id: 'send_email',
-    label: 'Send Email',
-    params: ['to', 'subject'],
-  },
-  {
-    id: 'generate_doc',
-    label: 'Generate Document',
-    params: ['template', 'recipient'],
-  },
-  {
-    id: 'assign_badge',
-    label: 'Assign Badge',
-    params: ['badge_name', 'employee_id'],
-  },
-  {
-    id: 'notify_slack',
-    label: 'Notify Slack Channel',
-    params: ['channel', 'message'],
-  },
-  {
-    id: 'schedule_meeting',
-    label: 'Schedule Meeting',
-    params: ['title', 'attendees', 'date'],
-  },
+  { id: 'send_email', label: 'Send Email', params: ['to', 'subject'] },
+  { id: 'generate_doc', label: 'Generate Document', params: ['template', 'recipient'] },
+  { id: 'assign_badge', label: 'Assign Badge', params: ['badge_name', 'employee_id'] },
+  { id: 'notify_slack', label: 'Notify Slack Channel', params: ['channel', 'message'] },
+  { id: 'schedule_meeting', label: 'Schedule Meeting', params: ['title', 'attendees', 'date'] },
 ];
 
-/**
- * GET /automations
- * Returns available automated actions
- */
 export async function getAutomations() {
-  // Simulate network delay
-  await new Promise((resolve) => setTimeout(resolve, 300));
+  await new Promise((r) => setTimeout(r, 300));
   return [...AUTOMATIONS];
 }
 
-/**
- * POST /simulate
- * Accepts a serialized workflow and returns step-by-step execution results
- */
 export async function simulateWorkflow(workflowJson) {
-  await new Promise((resolve) => setTimeout(resolve, 800));
-
+  await new Promise((r) => setTimeout(r, 800));
   const { nodes, edges } = workflowJson;
 
-  if (!nodes || nodes.length === 0) {
-    return {
-      success: false,
-      error: 'No nodes in workflow',
-      steps: [],
-    };
-  }
+  if (!nodes || nodes.length === 0)
+    return { success: false, error: 'No nodes in workflow', steps: [] };
 
-  // Build adjacency map
   const adjacency = {};
-  edges.forEach((edge) => {
-    if (!adjacency[edge.source]) adjacency[edge.source] = [];
-    adjacency[edge.source].push(edge.target);
+  edges.forEach((e) => {
+    if (!adjacency[e.source]) adjacency[e.source] = [];
+    adjacency[e.source].push(e.target);
   });
 
-  // Find start node
   const startNode = nodes.find((n) => n.type === 'startNode');
-  if (!startNode) {
-    return {
-      success: false,
-      error: 'No Start Node found',
-      steps: [],
-    };
-  }
+  if (!startNode)
+    return { success: false, error: 'No Start Node found', steps: [] };
 
-  // Walk the graph from start node (BFS)
   const visited = new Set();
   const queue = [startNode.id];
   const steps = [];
@@ -83,35 +37,24 @@ export async function simulateWorkflow(workflowJson) {
     const currentId = queue.shift();
     if (visited.has(currentId)) continue;
     visited.add(currentId);
-
     const node = nodes.find((n) => n.id === currentId);
     if (!node) continue;
-
-    const stepResult = generateStepResult(node, stepNum);
-    steps.push(stepResult);
+    steps.push(generateStepResult(node, stepNum));
     stepNum++;
-
-    const nextNodes = adjacency[currentId] || [];
-    nextNodes.forEach((nextId) => {
-      if (!visited.has(nextId)) queue.push(nextId);
+    (adjacency[currentId] || []).forEach((id) => {
+      if (!visited.has(id)) queue.push(id);
     });
   }
 
-  return {
-    success: true,
-    totalSteps: steps.length,
-    steps,
-  };
+  return { success: true, totalSteps: steps.length, steps };
 }
 
 function generateStepResult(node, stepNum) {
   const data = node.data || {};
   const title = data.label || data.title || `Step ${stepNum}`;
-
-  const statusOptions = ['completed', 'completed', 'completed', 'pending'];
-  const status = statusOptions[Math.floor(Math.random() * statusOptions.length)];
-
-  const baseStep = {
+  const statusOpts = ['completed', 'completed', 'completed', 'pending'];
+  const status = statusOpts[Math.floor(Math.random() * statusOpts.length)];
+  const base = {
     step: stepNum,
     nodeId: node.id,
     nodeType: node.type,
@@ -122,32 +65,16 @@ function generateStepResult(node, stepNum) {
 
   switch (node.type) {
     case 'startNode':
-      return { ...baseStep, message: `Workflow started: "${title}"`, status: 'completed' };
+      return { ...base, message: `Workflow started: "${title}"`, status: 'completed' };
     case 'taskNode':
-      return {
-        ...baseStep,
-        message: `Task "${title}" assigned to ${data.assignee || 'Unassigned'}`,
-        details: data.description || 'No description provided',
-      };
+      return { ...base, message: `Task "${title}" assigned to ${data.assignee || 'Unassigned'}`, details: data.description || '' };
     case 'approvalNode':
-      return {
-        ...baseStep,
-        message: `Approval requested from ${data.approverRole || 'Manager'}`,
-        details: `Auto-approve threshold: ${data.autoApproveThreshold || 'N/A'}`,
-      };
+      return { ...base, message: `Approval requested from ${data.approverRole || 'Manager'}`, details: `Auto-approve threshold: ${data.autoApproveThreshold || 'N/A'}` };
     case 'automatedNode':
-      return {
-        ...baseStep,
-        message: `Automated action executed: ${data.actionLabel || data.actionId || 'Unknown'}`,
-        status: 'completed',
-      };
+      return { ...base, message: `Executed: ${data.actionLabel || data.actionId || 'Unknown'}`, status: 'completed' };
     case 'endNode':
-      return {
-        ...baseStep,
-        message: data.endMessage || 'Workflow completed',
-        status: 'completed',
-      };
+      return { ...base, message: data.endMessage || 'Workflow completed', status: 'completed' };
     default:
-      return { ...baseStep, message: `Executed: ${title}` };
+      return { ...base, message: `Executed: ${title}` };
   }
 }
